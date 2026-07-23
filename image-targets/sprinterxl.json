@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 14,
+    "left": 0,
+    "width": 578,
+    "height": 770,
+    "isRotated": false,
+    "originalWidth": 578,
+    "originalHeight": 800
+  },
+  "imagePath": "image-targets/sprinterxl_luminance.jpg",
+  "metadata": null,
+  "name": "sprinterxl",
+  "resources": {
+    "originalImage": "sprinterxl_original.jpg",
+    "croppedImage": "sprinterxl_cropped.jpg",
+    "thumbnailImage": "sprinterxl_thumbnail.jpg",
+    "luminanceImage": "sprinterxl_luminance.jpg"
+  },
+  "created": 1784307133364,
+  "updated": 1784307133364
+}
