@@ -1,4 +1,4 @@
-import { COLORES_LABORATORIO as COLORES, LABORATORIO } from '../configuracion/laboratorio'
+import { COLORES_LABORATORIO as COLORES, LABORATORIO, MOBILIARIO } from '../configuracion/laboratorio'
 import { usarTexturaPiso } from './texturas'
 
 const { ancho, fondo, alto, grosorMuro, alturaZoclo } = LABORATORIO
@@ -228,30 +228,32 @@ function GabineteMural({
   )
 }
 
-/** Mobiliario arrimado a los muros, para que el centro quede libre. */
+/**
+ * Mobiliario arrimado a los muros, para que el centro quede libre.
+ * La colocacion sale de MOBILIARIO; aqui solo se dibuja lo que diga esa lista.
+ */
 function Mobiliario() {
-  const { mesa, gabinete } = LABORATORIO
-  const xMesaIzquierda = -medioAncho + mesa.fondo / 2
-  const xGabineteIzquierdo = -medioAncho + gabinete.fondo / 2
-  const zMesaFondo = -medioFondo + mesa.fondo / 2
-  const zGabineteFondo = -medioFondo + gabinete.fondo / 2
+  const grados = (valor: number) => (valor * Math.PI) / 180
 
   return (
     <>
-      {/* Pared izquierda, de lado a lado */}
-      <MesaLaboratorio largo={4.6} posicion={[xMesaIzquierda, 0, 0]} giroY={Math.PI / 2} />
-      <GabineteMural largo={3.6} posicion={[xGabineteIzquierdo, 0, 0]} giroY={Math.PI / 2} />
+      {MOBILIARIO.mesas.map(({ largo, centro, giroY }, indice) => (
+        <MesaLaboratorio
+          key={`mesa-${indice}`}
+          largo={largo}
+          posicion={[centro[0], 0, centro[1]]}
+          giroY={grados(giroY)}
+        />
+      ))}
 
-      {/* Pared del fondo, a la derecha de la puerta */}
-      <MesaLaboratorio largo={3.4} posicion={[1.6, 0, zMesaFondo]} />
-      <GabineteMural largo={2.8} posicion={[1.6, 0, zGabineteFondo]} />
-
-      {/* Pared derecha, un tramo corto */}
-      <MesaLaboratorio
-        largo={2.6}
-        posicion={[medioAncho - mesa.fondo / 2, 0, 1.4]}
-        giroY={-Math.PI / 2}
-      />
+      {MOBILIARIO.gabinetes.map(({ largo, centro, giroY }, indice) => (
+        <GabineteMural
+          key={`gabinete-${indice}`}
+          largo={largo}
+          posicion={[centro[0], 0, centro[1]]}
+          giroY={grados(giroY)}
+        />
+      ))}
     </>
   )
 }

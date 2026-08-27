@@ -68,3 +68,35 @@ export const COLORES_LABORATORIO = {
   puerta: '#b9bec4',
   marcoPuerta: '#8d949c',
 } as const
+
+/**
+ * Colocacion del mobiliario, en METROS.
+ *
+ * Vive en datos y no dentro del componente porque hay dos sistemas que necesitan
+ * saber donde estan los muebles: el que los dibuja y el que decide adonde se puede
+ * uno teletransportar. Con dos listas separadas, mover una mesa dejaria al usuario
+ * plantandose dentro de ella.
+ *
+ * `centro` es [x, z]; `giroY` va en grados. Los gabinetes murales arrancan a 1.50 m
+ * y no estorban al caminar, asi que no cuentan como obstaculo.
+ */
+const medioAnchoSala = LABORATORIO.ancho / 2
+const medioFondoSala = LABORATORIO.fondo / 2
+
+export const MOBILIARIO = {
+  mesas: [
+    // Pared izquierda, de lado a lado
+    { largo: 4.6, centro: [-medioAnchoSala + LABORATORIO.mesa.fondo / 2, 0], giroY: 90 },
+    // Pared del fondo, a la derecha de la puerta
+    { largo: 3.4, centro: [1.6, -medioFondoSala + LABORATORIO.mesa.fondo / 2], giroY: 0 },
+    // Pared derecha, un tramo corto
+    { largo: 2.6, centro: [medioAnchoSala - LABORATORIO.mesa.fondo / 2, 1.4], giroY: -90 },
+  ],
+  gabinetes: [
+    { largo: 3.6, centro: [-medioAnchoSala + LABORATORIO.gabinete.fondo / 2, 0], giroY: 90 },
+    { largo: 2.8, centro: [1.6, -medioFondoSala + LABORATORIO.gabinete.fondo / 2], giroY: 0 },
+  ],
+} as const satisfies {
+  mesas: ReadonlyArray<{ largo: number; centro: readonly [number, number]; giroY: number }>
+  gabinetes: ReadonlyArray<{ largo: number; centro: readonly [number, number]; giroY: number }>
+}

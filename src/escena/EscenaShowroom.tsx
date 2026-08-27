@@ -7,6 +7,7 @@ import { RENDIMIENTO } from '../configuracion/rendimiento'
 import type { ModeloCargado } from '../ganchos/usarCargaModelo'
 import type { Equipo } from '../tipos/showroom'
 import ControlesEscritorio from './ControlesEscritorio'
+import Locomocion from './locomocion/Locomocion'
 import EquipoEnEscena from './EquipoEnEscena'
 import Iluminacion from './Iluminacion'
 import Laboratorio from './Laboratorio'
@@ -23,10 +24,13 @@ const POSICION_INICIAL_JUGADOR: [number, number, number] = [0, 0, 2.2]
 /**
  * La escena 3D del showroom.
  *
- * PASO 6: el mismo contenido sirve para escritorio y para el visor. <XR> conecta el
+ * PASO 7: el mismo contenido sirve para escritorio y para el visor. <XR> conecta el
  * almacen de sesion con la escena; <XROrigin> marca donde estan los pies del
- * usuario, y sobre el se monta la altura real de su cabeza. La locomocion llega en
- * el Paso 7 y solo tiene que mover ese origen.
+ * usuario, y sobre el se monta la altura real de su cabeza.
+ *
+ * La posicion y el giro del jugador viven aqui, y <Locomocion /> es lo unico que
+ * los cambia. Teniendolos en un solo sitio, nada mas puede mover al usuario por
+ * su cuenta, que es la clase de sorpresa que marea.
  *
  * En escritorio la camara arranca a 1.70 m del piso, la altura de los ojos de una
  * persona de pie, para que lo que se juzga en el navegador se parezca a lo que el
@@ -40,7 +44,10 @@ export default function EscenaShowroom({
   modelo: ModeloCargado | null
 }) {
   const [hotspotAbierto, setHotspotAbierto] = useState<string | null>(null)
-  const [posicionJugador] = useState<[number, number, number]>(POSICION_INICIAL_JUGADOR)
+  const [posicionJugador, setPosicionJugador] = useState<[number, number, number]>(
+    POSICION_INICIAL_JUGADOR,
+  )
+  const [rotacionJugador, setRotacionJugador] = useState(0)
 
   // Al cambiar de equipo, el panel abierto pertenece al anterior: se cierra.
   useEffect(() => setHotspotAbierto(null), [equipo.id])
@@ -77,7 +84,17 @@ export default function EscenaShowroom({
           onSeleccionarHotspot={setHotspotAbierto}
         />
 
-        <XROrigin position={posicionJugador} />
+        <XROrigin position={posicionJugador} rotation={[0, rotacionJugador, 0]} />
+
+        <Locomocion
+          origen={posicionJugador}
+          rotacionY={rotacionJugador}
+          onMover={(posicion, rotacion) => {
+            setPosicionJugador(posicion)
+            setRotacionJugador(rotacion)
+          }}
+        />
+
         <ControlesEscritorio />
       </XR>
     </Canvas>

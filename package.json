@@ -9,7 +9,8 @@
     "dev:visor": "vite --mode visor",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "tipos": "tsc --noEmit"
+    "tipos": "tsc --noEmit",
+    "comprobar": "tsx herramientas/comprobar-locomocion.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",
@@ -32,6 +33,7 @@
     "@vitejs/plugin-react": "^6.1.0",
     "draco3dgltf": "^1.5.7",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.12",
     "typescript": "^5.9.0",
     "vite": "^8.2.2"
   },
