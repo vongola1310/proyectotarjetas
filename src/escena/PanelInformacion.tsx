@@ -1,31 +1,11 @@
 import { useMemo, useState } from 'react'
 import { Billboard, Text } from '@react-three/drei'
-import { Shape } from 'three'
+import { crearFormaPanel } from './formas'
 
 import { HOTSPOTS } from '../configuracion/hotspots'
 import type { Hotspot } from '../tipos/showroom'
 
 const { panel, fuentes, colores, ordenPanel } = HOTSPOTS
-
-/** Rectangulo de esquinas redondeadas, centrado en su origen. */
-function crearFormaPanel(ancho: number, alto: number, radio: number): Shape {
-  const forma = new Shape()
-  const x = ancho / 2
-  const y = alto / 2
-  const r = Math.min(radio, x, y)
-
-  forma.moveTo(-x + r, -y)
-  forma.lineTo(x - r, -y)
-  forma.absarc(x - r, -y + r, r, -Math.PI / 2, 0, false)
-  forma.lineTo(x, y - r)
-  forma.absarc(x - r, y - r, r, 0, Math.PI / 2, false)
-  forma.lineTo(-x + r, y)
-  forma.absarc(-x + r, y - r, r, Math.PI / 2, Math.PI, false)
-  forma.lineTo(-x, -y + r)
-  forma.absarc(-x + r, -y + r, r, Math.PI, (3 * Math.PI) / 2, false)
-
-  return forma
-}
 
 /**
  * Panel de informacion de un hotspot.

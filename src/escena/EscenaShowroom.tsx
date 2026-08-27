@@ -6,13 +6,19 @@ import { almacenXR } from '../configuracion/almacenXR'
 import { RENDIMIENTO } from '../configuracion/rendimiento'
 import type { ModeloCargado } from '../ganchos/usarCargaModelo'
 import type { Equipo } from '../tipos/showroom'
+import { diagnosticoPedido } from '../ganchos/metricas'
 import ControlesEscritorio from './ControlesEscritorio'
+import MuestreoMetricas from './MuestreoMetricas'
+import PanelDiagnostico from './PanelDiagnostico'
 import Locomocion from './locomocion/Locomocion'
 import EquipoEnEscena from './EquipoEnEscena'
 import Iluminacion from './Iluminacion'
 import Laboratorio from './Laboratorio'
 
 const { camara, dpr, sombras } = RENDIMIENTO
+
+/** Se decide una vez al cargar: no tiene sentido reevaluarlo en cada render. */
+const CON_DIAGNOSTICO = diagnosticoPedido()
 
 /**
  * Donde empieza de pie el usuario dentro del visor: a poco mas de dos metros del
@@ -96,6 +102,13 @@ export default function EscenaShowroom({
         />
 
         <ControlesEscritorio />
+
+        {CON_DIAGNOSTICO && (
+          <>
+            <MuestreoMetricas />
+            <PanelDiagnostico />
+          </>
+        )}
       </XR>
     </Canvas>
   )

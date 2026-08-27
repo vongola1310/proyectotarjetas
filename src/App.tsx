@@ -2,7 +2,9 @@ import { useState } from 'react'
 
 import { equipoPorDefecto, equipos, buscarEquipo } from './data/equipos'
 import EscenaShowroom from './escena/EscenaShowroom'
+import { diagnosticoPedido } from './ganchos/metricas'
 import { usarCargaModelo } from './ganchos/usarCargaModelo'
+import DiagnosticoEscritorio from './ui/DiagnosticoEscritorio'
 import BotonEntrarVR from './ui/BotonEntrarVR'
 import PantallaCarga from './ui/PantallaCarga'
 import SelectorEquipo from './ui/SelectorEquipo'
@@ -17,6 +19,9 @@ import SelectorEquipo from './ui/SelectorEquipo'
  * Dentro del visor no se ve nada de esta capa: alli no hay DOM, y lo que el cliente
  * vea con el casco puesto tiene que ser geometria de la escena.
  */
+/** Se decide una vez al cargar. */
+const CON_DIAGNOSTICO = diagnosticoPedido()
+
 export default function App() {
   const [equipoId, setEquipoId] = useState(equipoPorDefecto.id)
   const equipo = buscarEquipo(equipoId) ?? equipoPorDefecto
@@ -30,7 +35,7 @@ export default function App() {
       {/* Capa 2D. pointer-events-none deja pasar el raton al lienzo; cada control
           que si deba recibir clics lo vuelve a activar por su cuenta. */}
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-between gap-4 p-6">
-        <header>
+        <header className="flex items-start justify-between gap-4">
           <div className="inline-block max-w-md rounded-xl border border-borde/60 bg-fondo/80 px-4 py-3 backdrop-blur">
             <p className="text-[0.65rem] font-medium uppercase tracking-[0.2em] text-acento">
               Revvity Mexico &middot; EUROIMMUN
@@ -40,6 +45,8 @@ export default function App() {
               {equipo.descripcionCorta}
             </p>
           </div>
+
+          {CON_DIAGNOSTICO && <DiagnosticoEscritorio />}
         </header>
 
         <div className="flex items-end justify-between gap-4">
