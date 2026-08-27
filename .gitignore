@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+
+# Build
+dist/
+*.tsbuildinfo
+
+# Vercel
+.vercel/
+
+# Entorno
+.env
+.env.*
+!.env.example
+
+# Archivos temporales del pipeline de modelos
+herramientas/temporal/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+*.local
+.idea/
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,43 @@
+{
+  "name": "showroom-virtual",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Showroom virtual en WebXR de los analizadores EUROIMMUN - Revvity Mexico",
+  "scripts": {
+    "dev": "vite",
+    "dev:visor": "vite --mode visor",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tipos": "tsc --noEmit",
+    "comprobar": "tsx herramientas/comprobar-locomocion.ts"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
+    "@react-three/xr": "^6.6.30",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@gltf-transform/cli": "^4.4.2",
+    "@gltf-transform/core": "^4.4.2",
+    "@gltf-transform/extensions": "^4.4.2",
+    "@gltf-transform/functions": "^4.4.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@types/three": "^0.185.4",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
+    "@vitejs/plugin-react": "^6.1.0",
+    "draco3dgltf": "^1.5.7",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.0",
+    "vite": "^8.2.2"
+  },
+  "overrides": {
+    "sharp": "^0.35.4"
+  }
+}
