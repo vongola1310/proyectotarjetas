@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 
@@ -17,8 +18,8 @@ const PUNTO_DE_INTERES: [number, number, number] = [0, 0.9, 0]
 /**
  * La escena 3D del showroom.
  *
- * PASO 4: el laboratorio mas el equipo cargado, en modo escritorio. Los hotspots y
- * la capa de VR se montan encima en los pasos siguientes.
+ * PASO 5: el laboratorio, el equipo y sus hotspots, en modo escritorio. La capa de
+ * VR se monta encima en el paso siguiente.
  *
  * La camara arranca a 1.70 m del piso a proposito. Es la altura de los ojos de una
  * persona de pie, la misma con la que se vera dentro del visor, de modo que lo que
@@ -31,8 +32,16 @@ export default function EscenaShowroom({
   equipo: Equipo
   modelo: ModeloCargado | null
 }) {
+  const [hotspotAbierto, setHotspotAbierto] = useState<string | null>(null)
+
+  // Al cambiar de equipo, el panel abierto pertenece al anterior: se cierra.
+  useEffect(() => setHotspotAbierto(null), [equipo.id])
+
   return (
     <Canvas
+      // R3F llama a esto cuando un clic no alcanza ningun objeto. Pinchar en el
+      // vacio cierra el panel, que es lo que uno espera.
+      onPointerMissed={() => setHotspotAbierto(null)}
       dpr={dpr}
       // 'percentage' = PCFShadowMap. El PCFSoft que R3F usa por defecto quedo
       // deprecado en three 0.185, y ademas cuesta mas por pixel del que podemos
@@ -52,7 +61,12 @@ export default function EscenaShowroom({
 
       <Iluminacion />
       <Laboratorio />
-      <EquipoEnEscena equipo={equipo} modelo={modelo} />
+      <EquipoEnEscena
+        equipo={equipo}
+        modelo={modelo}
+        hotspotAbierto={hotspotAbierto}
+        onSeleccionarHotspot={setHotspotAbierto}
+      />
 
       <OrbitControls
         target={PUNTO_DE_INTERES}

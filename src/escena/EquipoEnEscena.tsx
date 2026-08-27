@@ -2,6 +2,7 @@ import { MathUtils } from 'three'
 
 import type { Equipo } from '../tipos/showroom'
 import { calcularCentrado, type ModeloCargado } from '../ganchos/usarCargaModelo'
+import CapaHotspots from './CapaHotspots'
 
 /**
  * Coloca un equipo en el laboratorio a su tamano real.
@@ -22,13 +23,20 @@ import { calcularCentrado, type ModeloCargado } from '../ganchos/usarCargaModelo
  *
  * La carga vive en App y no aqui a proposito: la barra de progreso es interfaz 2D,
  * esta fuera del lienzo, y el estado tiene que nacer donde puedan verlo los dos.
+ *
+ * Los hotspots cuelgan del grupo exterior pero NO del de escala: sus posiciones ya
+ * vienen en metros.
  */
 export default function EquipoEnEscena({
   equipo,
   modelo,
+  hotspotAbierto,
+  onSeleccionarHotspot,
 }: {
   equipo: Equipo
   modelo: ModeloCargado | null
+  hotspotAbierto: string | null
+  onSeleccionarHotspot: (id: string | null) => void
 }) {
   if (modelo === null) {
     return null
@@ -45,6 +53,12 @@ export default function EquipoEnEscena({
           <primitive object={modelo.escena} />
         </group>
       </group>
+
+      <CapaHotspots
+        hotspots={equipo.hotspots}
+        abierto={hotspotAbierto}
+        onSeleccionar={onSeleccionarHotspot}
+      />
     </group>
   )
 }
