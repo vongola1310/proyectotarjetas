@@ -1,14 +1,15 @@
 import { equipoPorDefecto } from './data/equipos'
 import EscenaShowroom from './escena/EscenaShowroom'
 import { usarCargaModelo } from './ganchos/usarCargaModelo'
+import BotonEntrarVR from './ui/BotonEntrarVR'
 import PantallaCarga from './ui/PantallaCarga'
 
 /**
  * Punto de entrada de la interfaz del showroom.
  *
- * PASO 4: el equipo se carga aqui, no dentro de la escena, porque la barra de
- * progreso es interfaz 2D y vive fuera del lienzo. Naciendo el estado en este nivel
- * lo ven los dos sin que ninguno tenga que avisar al otro durante el render.
+ * PASO 6: la interfaz 2D es la de escritorio. Dentro del visor no se ve nada de
+ * esto, porque alli no hay DOM: lo que el cliente vea con el casco puesto tiene que
+ * ser geometria de la escena.
  *
  * El selector de equipo (Paso 8) sustituira esta constante por estado.
  */
@@ -32,10 +33,12 @@ export default function App() {
           </div>
         </header>
 
-        <footer>
-          <p className="inline-block rounded-lg border border-borde/60 bg-fondo/80 px-3 py-2 text-xs text-texto-tenue backdrop-blur">
-            Arrastra para girar &middot; rueda para acercar &middot; clic derecho para desplazar
+        <footer className="flex items-end justify-between gap-4">
+          <p className="rounded-lg border border-borde/60 bg-fondo/80 px-3 py-2 text-xs text-texto-tenue backdrop-blur">
+            Arrastra para girar &middot; rueda para acercar &middot; clic en un punto para ver su ficha
           </p>
+
+          <BotonEntrarVR listo={modelo !== null} />
         </footer>
       </div>
 

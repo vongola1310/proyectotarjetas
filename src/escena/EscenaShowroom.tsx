@@ -1,29 +1,36 @@
 import { useEffect, useState } from 'react'
-import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
+import { XR, XROrigin } from '@react-three/xr'
 
-import { LABORATORIO } from '../configuracion/laboratorio'
+import { almacenXR } from '../configuracion/almacenXR'
 import { RENDIMIENTO } from '../configuracion/rendimiento'
 import type { ModeloCargado } from '../ganchos/usarCargaModelo'
 import type { Equipo } from '../tipos/showroom'
+import ControlesEscritorio from './ControlesEscritorio'
 import EquipoEnEscena from './EquipoEnEscena'
 import Iluminacion from './Iluminacion'
 import Laboratorio from './Laboratorio'
 
 const { camara, dpr, sombras } = RENDIMIENTO
 
-/** Punto al que mira la camara de escritorio: el centro de la sala, a media altura. */
-const PUNTO_DE_INTERES: [number, number, number] = [0, 0.9, 0]
+/**
+ * Donde empieza de pie el usuario dentro del visor: a poco mas de dos metros del
+ * equipo, mirando hacia el. La orientacion por defecto de three ya apunta hacia -Z,
+ * asi que estando en +Z se mira al centro de la sala sin girar nada.
+ */
+const POSICION_INICIAL_JUGADOR: [number, number, number] = [0, 0, 2.2]
 
 /**
  * La escena 3D del showroom.
  *
- * PASO 5: el laboratorio, el equipo y sus hotspots, en modo escritorio. La capa de
- * VR se monta encima en el paso siguiente.
+ * PASO 6: el mismo contenido sirve para escritorio y para el visor. <XR> conecta el
+ * almacen de sesion con la escena; <XROrigin> marca donde estan los pies del
+ * usuario, y sobre el se monta la altura real de su cabeza. La locomocion llega en
+ * el Paso 7 y solo tiene que mover ese origen.
  *
- * La camara arranca a 1.70 m del piso a proposito. Es la altura de los ojos de una
- * persona de pie, la misma con la que se vera dentro del visor, de modo que lo que
- * se juzga en el navegador se parece a lo que el cliente va a ver puesto el Quest.
+ * En escritorio la camara arranca a 1.70 m del piso, la altura de los ojos de una
+ * persona de pie, para que lo que se juzga en el navegador se parezca a lo que el
+ * cliente vera con el visor puesto.
  */
 export default function EscenaShowroom({
   equipo,
@@ -33,6 +40,7 @@ export default function EscenaShowroom({
   modelo: ModeloCargado | null
 }) {
   const [hotspotAbierto, setHotspotAbierto] = useState<string | null>(null)
+  const [posicionJugador] = useState<[number, number, number]>(POSICION_INICIAL_JUGADOR)
 
   // Al cambiar de equipo, el panel abierto pertenece al anterior: se cierra.
   useEffect(() => setHotspotAbierto(null), [equipo.id])
@@ -55,31 +63,23 @@ export default function EscenaShowroom({
       }}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
     >
-      {/* Fondo neutro: si la camara de escritorio se asoma fuera de la sala, se ve
-          un gris de estudio y no un vacio que parece un fallo. */}
-      <color attach="background" args={['#3a3f46']} />
+      <XR store={almacenXR}>
+        {/* Fondo neutro: si la camara de escritorio se asoma fuera de la sala, se ve
+            un gris de estudio y no un vacio que parece un fallo. */}
+        <color attach="background" args={['#3a3f46']} />
 
-      <Iluminacion />
-      <Laboratorio />
-      <EquipoEnEscena
-        equipo={equipo}
-        modelo={modelo}
-        hotspotAbierto={hotspotAbierto}
-        onSeleccionarHotspot={setHotspotAbierto}
-      />
+        <Iluminacion />
+        <Laboratorio />
+        <EquipoEnEscena
+          equipo={equipo}
+          modelo={modelo}
+          hotspotAbierto={hotspotAbierto}
+          onSeleccionarHotspot={setHotspotAbierto}
+        />
 
-      <OrbitControls
-        target={PUNTO_DE_INTERES}
-        // Amortiguacion: el giro se frena solo en vez de detenerse en seco.
-        enableDamping
-        dampingFactor={0.08}
-        // Sin esto la camara se mete debajo del piso y se ve la sala por abajo.
-        maxPolarAngle={Math.PI / 2 - 0.02}
-        minPolarAngle={0.15}
-        minDistance={0.8}
-        // Tope pensado para no salirse de la sala y acabar mirando el muro por fuera.
-        maxDistance={Math.min(LABORATORIO.ancho, LABORATORIO.fondo) / 2 + 1}
-      />
+        <XROrigin position={posicionJugador} />
+        <ControlesEscritorio />
+      </XR>
     </Canvas>
   )
 }

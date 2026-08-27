@@ -6,6 +6,7 @@
   "description": "Showroom virtual en WebXR de los analizadores EUROIMMUN - Revvity Mexico",
   "scripts": {
     "dev": "vite",
+    "dev:visor": "vite --mode visor",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "tipos": "tsc --noEmit"
@@ -27,6 +28,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
     "@types/three": "^0.185.4",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
     "@vitejs/plugin-react": "^6.1.0",
     "draco3dgltf": "^1.5.7",
     "tailwindcss": "^4.3.3",
