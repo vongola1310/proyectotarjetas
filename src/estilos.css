@@ -44,3 +44,17 @@
     display: block;
   }
 }
+
+/*
+ * Barra de carga sin porcentaje fiable: recorre de lado a lado para decir "sigo
+ * trabajando" sin afirmar cuanto falta. Se usa mientras se descomprime la
+ * geometria y cuando el servidor no informa del tamano del archivo.
+ */
+@keyframes recorrer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}

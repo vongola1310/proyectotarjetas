@@ -1,16 +1,24 @@
+import { equipoPorDefecto } from './data/equipos'
 import EscenaShowroom from './escena/EscenaShowroom'
+import { usarCargaModelo } from './ganchos/usarCargaModelo'
+import PantallaCarga from './ui/PantallaCarga'
 
 /**
  * Punto de entrada de la interfaz del showroom.
  *
- * PASO 3: la escena 3D ocupa toda la pantalla y la interfaz 2D se superpone encima.
- * El selector de equipo y el boton de entrar en VR ocuparan esta misma capa en los
- * pasos siguientes.
+ * PASO 4: el equipo se carga aqui, no dentro de la escena, porque la barra de
+ * progreso es interfaz 2D y vive fuera del lienzo. Naciendo el estado en este nivel
+ * lo ven los dos sin que ninguno tenga que avisar al otro durante el render.
+ *
+ * El selector de equipo (Paso 8) sustituira esta constante por estado.
  */
 export default function App() {
+  const equipo = equipoPorDefecto
+  const { modelo, estado } = usarCargaModelo(equipo.modelo)
+
   return (
     <div className="relative h-full w-full bg-fondo">
-      <EscenaShowroom />
+      <EscenaShowroom equipo={equipo} modelo={modelo} />
 
       {/* Capa 2D. pointer-events-none deja pasar el raton al lienzo; cada control
           que si deba recibir clics lo vuelve a activar por su cuenta. */}
@@ -20,7 +28,7 @@ export default function App() {
             <p className="text-[0.65rem] font-medium uppercase tracking-[0.2em] text-acento">
               Revvity Mexico &middot; EUROIMMUN
             </p>
-            <h1 className="mt-1 text-lg font-semibold text-texto">Showroom Virtual</h1>
+            <h1 className="mt-1 text-lg font-semibold text-texto">{equipo.nombre}</h1>
           </div>
         </header>
 
@@ -30,6 +38,8 @@ export default function App() {
           </p>
         </footer>
       </div>
+
+      <PantallaCarga estado={estado} nombre={equipo.nombre} />
     </div>
   )
 }

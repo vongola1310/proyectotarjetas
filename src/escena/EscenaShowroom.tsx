@@ -3,6 +3,9 @@ import { Canvas } from '@react-three/fiber'
 
 import { LABORATORIO } from '../configuracion/laboratorio'
 import { RENDIMIENTO } from '../configuracion/rendimiento'
+import type { ModeloCargado } from '../ganchos/usarCargaModelo'
+import type { Equipo } from '../tipos/showroom'
+import EquipoEnEscena from './EquipoEnEscena'
 import Iluminacion from './Iluminacion'
 import Laboratorio from './Laboratorio'
 
@@ -14,18 +17,27 @@ const PUNTO_DE_INTERES: [number, number, number] = [0, 0.9, 0]
 /**
  * La escena 3D del showroom.
  *
- * PASO 3: solo el laboratorio, en modo escritorio con OrbitControls. Los equipos,
- * los hotspots y la capa de VR se montan encima en los pasos siguientes.
+ * PASO 4: el laboratorio mas el equipo cargado, en modo escritorio. Los hotspots y
+ * la capa de VR se montan encima en los pasos siguientes.
  *
  * La camara arranca a 1.70 m del piso a proposito. Es la altura de los ojos de una
  * persona de pie, la misma con la que se vera dentro del visor, de modo que lo que
  * se juzga en el navegador se parece a lo que el cliente va a ver puesto el Quest.
  */
-export default function EscenaShowroom() {
+export default function EscenaShowroom({
+  equipo,
+  modelo,
+}: {
+  equipo: Equipo
+  modelo: ModeloCargado | null
+}) {
   return (
     <Canvas
       dpr={dpr}
-      shadows={sombras.activas}
+      // 'percentage' = PCFShadowMap. El PCFSoft que R3F usa por defecto quedo
+      // deprecado en three 0.185, y ademas cuesta mas por pixel del que podemos
+      // gastar en el visor.
+      shadows={sombras.activas ? 'percentage' : false}
       camera={{
         position: [2.7, camara.alturaOjos, 2.6],
         fov: camara.fov,
@@ -40,6 +52,7 @@ export default function EscenaShowroom() {
 
       <Iluminacion />
       <Laboratorio />
+      <EquipoEnEscena equipo={equipo} modelo={modelo} />
 
       <OrbitControls
         target={PUNTO_DE_INTERES}
