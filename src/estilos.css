@@ -1,0 +1,46 @@
+@import 'tailwindcss';
+
+/*
+ * Paleta del showroom.
+ * Tonos sobrios y oscuros para que la interfaz 2D no compita con la escena 3D.
+ * PENDIENTE: sustituir --color-acento por el azul corporativo oficial de Revvity
+ * cuando tengamos el valor exacto del manual de marca.
+ */
+@theme {
+  --color-fondo: #0b0f14;
+  --color-superficie: #131a22;
+  --color-superficie-alta: #1b2530;
+  --color-borde: #26333f;
+  --color-texto: #e6edf3;
+  --color-texto-tenue: #8b9bab;
+  --color-acento: #4f9cf9;
+  --color-acento-tenue: #1e3a5f;
+
+  --font-interfaz: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+@layer base {
+  html,
+  body,
+  #raiz {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: var(--font-interfaz);
+    color-scheme: dark;
+    /* La app es de pantalla completa: nada de rebote ni scroll accidental. */
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* El canvas de WebGL debe recibir los gestos, no el navegador. */
+  canvas {
+    touch-action: none;
+    display: block;
+  }
+}
