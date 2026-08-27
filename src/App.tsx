@@ -1,53 +1,35 @@
-import { equipos } from './data/equipos'
+import EscenaShowroom from './escena/EscenaShowroom'
 
 /**
  * Punto de entrada de la interfaz del showroom.
  *
- * PASO 2: sigue siendo una pantalla provisional, pero ya lee el catalogo real
- * desde src/data/equipos.ts en lugar de tener el contenido escrito a mano. La
- * escena 3D del laboratorio entra en el Paso 3 y sustituye este contenido.
+ * PASO 3: la escena 3D ocupa toda la pantalla y la interfaz 2D se superpone encima.
+ * El selector de equipo y el boton de entrar en VR ocuparan esta misma capa en los
+ * pasos siguientes.
  */
 export default function App() {
   return (
-    <main className="flex h-full w-full items-center justify-center overflow-y-auto bg-fondo p-6">
-      <section className="w-full max-w-xl rounded-2xl border border-borde bg-superficie p-8 shadow-2xl">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-acento">
-          Revvity Mexico &middot; EUROIMMUN
-        </p>
+    <div className="relative h-full w-full bg-fondo">
+      <EscenaShowroom />
 
-        <h1 className="mt-3 text-3xl font-semibold text-texto">Showroom Virtual</h1>
+      {/* Capa 2D. pointer-events-none deja pasar el raton al lienzo; cada control
+          que si deba recibir clics lo vuelve a activar por su cuenta. */}
+      <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-6">
+        <header>
+          <div className="inline-block rounded-xl border border-borde/60 bg-fondo/80 px-4 py-3 backdrop-blur">
+            <p className="text-[0.65rem] font-medium uppercase tracking-[0.2em] text-acento">
+              Revvity Mexico &middot; EUROIMMUN
+            </p>
+            <h1 className="mt-1 text-lg font-semibold text-texto">Showroom Virtual</h1>
+          </div>
+        </header>
 
-        <p className="mt-3 text-sm leading-relaxed text-texto-tenue">
-          Recorrido a escala real de nuestros analizadores. Catalogo cargado desde datos;
-          la escena del laboratorio se construye en el siguiente paso.
-        </p>
-
-        <h2 className="mt-8 text-xs font-medium uppercase tracking-[0.2em] text-texto-tenue">
-          Catalogo ({equipos.length})
-        </h2>
-
-        <ul className="mt-4 space-y-3">
-          {equipos.map((equipo) => (
-            <li
-              key={equipo.id}
-              className="rounded-xl border border-borde bg-superficie-alta p-4"
-            >
-              <div className="flex items-baseline justify-between gap-4">
-                <h3 className="font-medium text-texto">{equipo.nombre}</h3>
-                <span className="shrink-0 text-xs text-texto-tenue">
-                  {equipo.hotspots.length} hotspots
-                </span>
-              </div>
-              <p className="mt-2 text-sm leading-relaxed text-texto-tenue">
-                {equipo.descripcionCorta}
-              </p>
-              <p className="mt-3 font-mono text-xs text-texto-tenue/70">
-                escala {equipo.escala} &middot; {equipo.modelo}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </main>
+        <footer>
+          <p className="inline-block rounded-lg border border-borde/60 bg-fondo/80 px-3 py-2 text-xs text-texto-tenue backdrop-blur">
+            Arrastra para girar &middot; rueda para acercar &middot; clic derecho para desplazar
+          </p>
+        </footer>
+      </div>
+    </div>
   )
 }
