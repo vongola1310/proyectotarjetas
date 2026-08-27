@@ -48,6 +48,7 @@ export const equipos: readonly Equipo[] = [
     // Se usa el ancho, que es la medida inequivoca: eje mayor del chasis, sin
     // partes moviles que lo alteren. Con el, el equipo queda en 1.200 x 0.645 m.
     escala: 0.0796822,
+    escalaVerificada: true,
 
     // Sobre la isla de exposicion del centro de la sala, apoyado en su cubierta.
     //
@@ -93,6 +94,46 @@ export const equipos: readonly Equipo[] = [
           'TEXTO PROVISIONAL. Alojamiento de los frascos de reactivo, con control de nivel para avisar antes de que se agoten a mitad de una corrida.',
       },
     ],
+  },
+
+  {
+    id: 'euroarray',
+    nombre: 'EUROArray',
+    modelo: '/models/euroarray.glb',
+
+    // ESCALA SIN VERIFICAR. El archivo parece venir ya en metros: con escala 1 mide
+    // 18 x 21 x 34 cm, tamano creible para un aparato pequeno de sobremesa. Es una
+    // lectura del archivo, no un dato de catalogo. Para fijarla:
+    //   node herramientas/medir-modelo.mjs public/models/euroarray.glb --ancho=<mm reales>
+    escala: 1,
+
+    posicionInicial: [0, LABORATORIO.mesa.alto, 0],
+
+    descripcionCorta:
+      'Sistema de microarrays sobre portaobjetos para deteccion simultanea de multiples parametros en una sola muestra.',
+
+    // Sin hotspots todavia: colocarlos exige mirar el modelo en la escena, y
+    // inventarlos ahora solo daria puntos apuntando a ninguna parte.
+    hotspots: [],
+  },
+
+  {
+    id: 'workstation-elisa',
+    nombre: 'Workstation ELISA',
+    modelo: '/models/workstation-elisa.glb',
+
+    // ESCALA SIN VERIFICAR. Calculada suponiendo 1600 mm de ancho, que es una
+    // suposicion mia. Con ella queda en 1.600 x 0.431 x 0.338 m; la proporcion
+    // ancho/alto de 3.7 encaja con una plataforma de pipeteo abierta, ancha y baja.
+    //   node herramientas/medir-modelo.mjs public/models/workstation-elisa.glb --ancho=<mm reales>
+    escala: 0.132703,
+
+    posicionInicial: [0, LABORATORIO.mesa.alto, 0],
+
+    descripcionCorta:
+      'Estacion de pipeteo automatizada para la preparacion de placas ELISA, con dilucion y dispensacion programables.',
+
+    hotspots: [],
   },
 ]
 

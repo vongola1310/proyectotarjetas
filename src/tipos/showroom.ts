@@ -79,6 +79,15 @@ export interface Equipo {
   readonly posicionInicial: Vector3Tupla
 
   /**
+   * Si la escala se calculo contra una medida real de catalogo.
+   *
+   * Ausente o falso significa que es una estimacion. La interfaz lo advierte, para
+   * que nadie ensene a un cliente un equipo del tamano equivocado creyendo que esta
+   * viendo la escala real, que es justo lo que esta herramienta promete.
+   */
+  readonly escalaVerificada?: boolean
+
+  /**
    * Giro del equipo sobre el eje vertical, en GRADOS.
    *
    * Los modelos no siempre salen del CAD mirando hacia el mismo lado. Es opcional
