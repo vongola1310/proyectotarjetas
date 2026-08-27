@@ -77,13 +77,35 @@ export const COLORES_LABORATORIO = {
  * uno teletransportar. Con dos listas separadas, mover una mesa dejaria al usuario
  * plantandose dentro de ella.
  *
- * `centro` es [x, z]; `giroY` va en grados. Los gabinetes murales arrancan a 1.50 m
- * y no estorban al caminar, asi que no cuentan como obstaculo.
+ * `centro` es [x, z]; `giroY` va en grados. `fondo` es opcional y solo hace falta
+ * cuando una mesa no usa la profundidad estandar. Los gabinetes murales arrancan a
+ * 1.50 m y no estorban al caminar, asi que no cuentan como obstaculo.
  */
 const medioAnchoSala = LABORATORIO.ancho / 2
 const medioFondoSala = LABORATORIO.fondo / 2
 
-export const MOBILIARIO = {
+/** Una mesa de laboratorio colocada en la sala. */
+export interface MesaDato {
+  readonly largo: number
+  /** [x, z] del centro de la mesa. */
+  readonly centro: readonly [number, number]
+  /** Giro sobre el eje vertical, en grados. */
+  readonly giroY: number
+  /** Profundidad propia. Sin ella se usa la estandar de las mesas de pared. */
+  readonly fondo?: number
+}
+
+/** Un gabinete colgado de la pared. */
+export interface GabineteDato {
+  readonly largo: number
+  readonly centro: readonly [number, number]
+  readonly giroY: number
+}
+
+export const MOBILIARIO: {
+  readonly mesas: readonly MesaDato[]
+  readonly gabinetes: readonly GabineteDato[]
+} = {
   mesas: [
     // Pared izquierda, de lado a lado
     { largo: 4.6, centro: [-medioAnchoSala + LABORATORIO.mesa.fondo / 2, 0], giroY: 90 },
@@ -91,12 +113,16 @@ export const MOBILIARIO = {
     { largo: 3.4, centro: [1.6, -medioFondoSala + LABORATORIO.mesa.fondo / 2], giroY: 0 },
     // Pared derecha, un tramo corto
     { largo: 2.6, centro: [medioAnchoSala - LABORATORIO.mesa.fondo / 2, 1.4], giroY: -90 },
+    // ISLA DE EXPOSICION, en el centro. Es la mesa sobre la que va el equipo.
+    //
+    // Exenta y no arrimada a un muro a proposito: la promesa de la demo es poder
+    // caminar alrededor del analizador, y contra la pared solo se le ve por delante.
+    // Mas honda que las de pared (0.95 contra 0.75) para que el equipo apoye entero
+    // incluso con la tapa abierta, que sobresale unos 6 cm por detras del chasis.
+    { largo: 1.9, fondo: 0.95, centro: [0, 0], giroY: 0 },
   ],
   gabinetes: [
     { largo: 3.6, centro: [-medioAnchoSala + LABORATORIO.gabinete.fondo / 2, 0], giroY: 90 },
     { largo: 2.8, centro: [1.6, -medioFondoSala + LABORATORIO.gabinete.fondo / 2], giroY: 0 },
   ],
-} as const satisfies {
-  mesas: ReadonlyArray<{ largo: number; centro: readonly [number, number]; giroY: number }>
-  gabinetes: ReadonlyArray<{ largo: number; centro: readonly [number, number]; giroY: number }>
 }

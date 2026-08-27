@@ -3,8 +3,11 @@ import { useXR } from '@react-three/xr'
 
 import { LABORATORIO } from '../configuracion/laboratorio'
 
-/** Punto al que mira la camara de escritorio: el centro de la sala, a media altura. */
-const PUNTO_DE_INTERES: [number, number, number] = [0, 0.9, 0]
+/**
+ * Punto al que mira la camara de escritorio: el equipo sobre la isla, a la altura
+ * a la que lo veria alguien de pie delante de el.
+ */
+const PUNTO_DE_INTERES: [number, number, number] = [0, LABORATORIO.mesa.alto + 0.35, 0]
 
 /**
  * Controles de orbita, solo para escritorio.

@@ -1,3 +1,4 @@
+import { LABORATORIO } from '../configuracion/laboratorio'
 import type { Equipo } from '../tipos/showroom'
 
 /**
@@ -32,21 +33,28 @@ export const equipos: readonly Equipo[] = [
     // con el que se mida:
     //
     //   ancho  1200 mm / 15.060 unidades  ->  0.0797
-    //   fondo   750 mm / 10.620 unidades  ->  0.0706
-    //   alto   1150 mm /  8.108 unidades  ->  0.1418   <- se sale del rango
+    //   fondo   750 mm / 10.583 unidades  ->  0.0709
+    //   alto   1150 mm /  8.098 unidades  ->  0.1420   <- se sale del rango
     //
-    // El modelo es mucho mas bajo, en proporcion a su huella, de lo que dice la
-    // ficha. La explicacion mas probable es que el .glb represente solo el cuerpo
-    // superior del equipo y que los 115 cm de la ficha incluyan un gabinete o
-    // pedestal que el modelo no trae. Falta confirmarlo.
+    // El fondo ya esta explicado: la caja envolvente incluye la TAPA ABIERTA, que
+    // sobresale por detras del chasis. Midiendo solo el chasis el fondo sale en
+    // 0.787 m contra los 0.750 de ficha, un 5%, que es tolerancia normal de
+    // modelado. La ficha mide con la tapa cerrada.
     //
-    // Mientras tanto se usa el ancho, que es la medida menos ambigua: es el eje
-    // mayor del chasis y no lo altera el vuelo de la tapa. Con el, el equipo queda
-    // en 1.200 x 0.646 x 0.846 m.
+    // El alto sigue sin cuadrar: el modelo mide 0.645 m y la ficha dice 1.150 m.
+    // Lo mas probable es que el .glb traiga solo el cuerpo del equipo y que la
+    // ficha cuente tambien su base o pedestal. PENDIENTE DE CONFIRMAR.
+    //
+    // Se usa el ancho, que es la medida inequivoca: eje mayor del chasis, sin
+    // partes moviles que lo alteren. Con el, el equipo queda en 1.200 x 0.645 m.
     escala: 0.0796822,
 
-    // Centrado en el laboratorio, apoyado en el piso.
-    posicionInicial: [0, 0, 0],
+    // Sobre la isla de exposicion del centro de la sala, apoyado en su cubierta.
+    //
+    // El I-2P es un equipo de sobremesa: en el piso se ve mal y, mas importante,
+    // el cliente lo percibe mas pequeno de lo que es porque pierde la referencia
+    // de altura. La isla esta exenta para poder rodearla.
+    posicionInicial: [0, LABORATORIO.mesa.alto, 0],
 
     descripcionCorta:
       'Sistema automatizado para el procesamiento de ensayos ELISA e inmunofluorescencia indirecta, con dos placas en paralelo.',

@@ -177,12 +177,16 @@ function MesaLaboratorio({
   largo,
   posicion,
   giroY = 0,
+  fondo,
 }: {
   largo: number
   posicion: [number, number, number]
   giroY?: number
+  /** Profundidad propia. Sin ella se usa la estandar de las mesas de pared. */
+  fondo?: number
 }) {
-  const { alto: altoMesa, fondo: fondoMesa, grosorCubierta } = LABORATORIO.mesa
+  const { alto: altoMesa, grosorCubierta } = LABORATORIO.mesa
+  const fondoMesa = fondo ?? LABORATORIO.mesa.fondo
   const alturaZocloMesa = 0.09
   const altoCuerpo = altoMesa - grosorCubierta - alturaZocloMesa
 
@@ -237,12 +241,13 @@ function Mobiliario() {
 
   return (
     <>
-      {MOBILIARIO.mesas.map(({ largo, centro, giroY }, indice) => (
+      {MOBILIARIO.mesas.map(({ largo, centro, giroY, fondo }, indice) => (
         <MesaLaboratorio
           key={`mesa-${indice}`}
           largo={largo}
           posicion={[centro[0], 0, centro[1]]}
           giroY={grados(giroY)}
+          fondo={fondo}
         />
       ))}
 

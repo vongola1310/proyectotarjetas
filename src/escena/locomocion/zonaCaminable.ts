@@ -28,8 +28,9 @@ const SUELO_UTIL: Rectangulo = {
  */
 function huellaDeMesa(mesa: (typeof MOBILIARIO.mesas)[number]): Rectangulo {
   const deLado = Math.abs(mesa.giroY) === 90
-  const medioX = (deLado ? LABORATORIO.mesa.fondo : mesa.largo) / 2 + margenObstaculos
-  const medioZ = (deLado ? mesa.largo : LABORATORIO.mesa.fondo) / 2 + margenObstaculos
+  const fondo = mesa.fondo ?? LABORATORIO.mesa.fondo
+  const medioX = (deLado ? fondo : mesa.largo) / 2 + margenObstaculos
+  const medioZ = (deLado ? mesa.largo : fondo) / 2 + margenObstaculos
   const [x, z] = mesa.centro
 
   return { minX: x - medioX, maxX: x + medioX, minZ: z - medioZ, maxZ: z + medioZ }
