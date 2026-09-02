@@ -2,9 +2,11 @@ import { useState } from 'react'
 
 import { equipoPorDefecto, equipos, buscarEquipo } from './data/equipos'
 import EscenaShowroom from './escena/EscenaShowroom'
+import { colocacionPedida } from './ganchos/colocacion'
 import { diagnosticoPedido } from './ganchos/metricas'
 import { usarCargaModelo } from './ganchos/usarCargaModelo'
 import DiagnosticoEscritorio from './ui/DiagnosticoEscritorio'
+import PanelColocacion from './ui/PanelColocacion'
 import BotonEntrarVR from './ui/BotonEntrarVR'
 import PantallaCarga from './ui/PantallaCarga'
 import SelectorEquipo from './ui/SelectorEquipo'
@@ -21,6 +23,7 @@ import SelectorEquipo from './ui/SelectorEquipo'
  */
 /** Se decide una vez al cargar. */
 const CON_DIAGNOSTICO = diagnosticoPedido()
+const EN_COLOCACION = colocacionPedida()
 
 export default function App() {
   const [equipoId, setEquipoId] = useState(equipoPorDefecto.id)
@@ -46,7 +49,10 @@ export default function App() {
             </p>
           </div>
 
-          {CON_DIAGNOSTICO && <DiagnosticoEscritorio />}
+          <div className="flex flex-col items-end gap-3">
+            {CON_DIAGNOSTICO && <DiagnosticoEscritorio />}
+            {EN_COLOCACION && <PanelColocacion />}
+          </div>
         </header>
 
         <div className="flex items-end justify-between gap-4">

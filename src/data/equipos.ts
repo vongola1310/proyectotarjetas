@@ -16,10 +16,16 @@ import type { Equipo } from '../tipos/showroom'
  *             factores no concuerdan entre si, avisa, y eso delata un modelo rotado
  *             o incompleto antes de que el equipo salga deformado en la demo.
  *
- *   hotspots  Sus posiciones son relativas al equipo (origen en el centro de la
- *             huella, Y = 0 en el piso), en metros. Las de este primer equipo se
- *             derivaron de los centros reales de las piezas del modelo, pero
- *             conviene afinarlas mirando la escena en el Paso 5.
+ *   hotspots  Sus posiciones son relativas al equipo: origen en el centro de su
+ *             huella, Y = 0 en su base, en metros. Al ser relativas siguen valiendo
+ *             aunque el equipo cambie de sitio o de altura.
+ *
+ *             NO se calculan: hay que senalar la pieza. Abre la aplicacion con
+ *             ?colocar en la direccion, haz clic sobre la parte del equipo que
+ *             quieras marcar y copia la linea que aparece.
+ *
+ *             Para referencia, el Analyzer I-2P ocupa de -0.60 a 0.60 en X, de 0 a
+ *             0.65 en Y, y de -0.42 a 0.42 en Z. El frente es la Z positiva.
  */
 export const equipos: readonly Equipo[] = [
   {
@@ -63,32 +69,32 @@ export const equipos: readonly Equipo[] = [
     hotspots: [
       {
         id: 'tapa',
-        // Centro de la pieza "Tapa_EUROIMMUN Analyzer I-2P" del modelo.
-        posicion: [0.109, 0.427, 0.196],
+        // Justo encima de la cubierta, que remata el equipo a 0.645 m.
+        posicion: [0.11, 0.7, 0.19],
         titulo: 'Cubierta de proteccion',
         descripcion:
           'TEXTO PROVISIONAL. Cubierta abatible que aisla el area de trabajo durante el procesamiento y protege las muestras de contaminacion ambiental.',
       },
       {
         id: 'cajon-muestras',
-        // Centro de la pieza "Cajon_S1" del modelo.
-        posicion: [0.056, 0.271, 0.03],
+        // Delante de la cara frontal del cajon, separado para no quedar embutido.
+        posicion: [0.06, 0.27, 0.47],
         titulo: 'Cajon de muestras',
         descripcion:
           'TEXTO PROVISIONAL. Bandeja extraible donde se cargan las gradillas de muestras y los controles antes de iniciar la serie.',
       },
       {
         id: 'lector-codigo-barras',
-        // Centro de la pieza "Codigo_Barras" del modelo.
-        posicion: [0.482, 0.513, -0.143],
+        // Fuera del panel lateral derecho, donde estan las etiquetas del equipo.
+        posicion: [0.65, 0.29, 0.1],
         titulo: 'Lector de codigo de barras',
         descripcion:
           'TEXTO PROVISIONAL. Identifica automaticamente muestras y reactivos, eliminando la transcripcion manual y su riesgo de error.',
       },
       {
         id: 'reactivos',
-        // Centro de la pieza "Componente_Botes4" del modelo.
-        posicion: [-0.527, 0.209, 0.15],
+        // Fuera del costado izquierdo, a la altura de los frascos.
+        posicion: [-0.65, 0.21, 0.15],
         titulo: 'Posiciones de reactivos',
         descripcion:
           'TEXTO PROVISIONAL. Alojamiento de los frascos de reactivo, con control de nivel para avisar antes de que se agoten a mitad de una corrida.',

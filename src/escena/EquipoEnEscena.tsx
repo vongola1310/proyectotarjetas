@@ -1,8 +1,16 @@
-import { MathUtils } from 'three'
+import { useRef } from 'react'
+import type { ThreeEvent } from '@react-three/fiber'
+import { Group, MathUtils, Vector3 } from 'three'
 
-import type { Equipo } from '../tipos/showroom'
+import { anotarPunto, colocacionPedida } from '../ganchos/colocacion'
 import { calcularCentrado, type ModeloCargado } from '../ganchos/usarCargaModelo'
+import type { Equipo } from '../tipos/showroom'
 import CapaHotspots from './CapaHotspots'
+
+/** Se decide una vez al cargar: no tiene sentido reevaluarlo en cada render. */
+const EN_COLOCACION = colocacionPedida()
+
+const puntoAuxiliar = new Vector3()
 
 /**
  * Coloca un equipo en el laboratorio a su tamano real.
@@ -19,7 +27,7 @@ import CapaHotspots from './CapaHotspots'
  *
  * El centrado se calcula de la caja real del modelo y no se guarda como dato: asi,
  * si manana alguien reexporta el .glb con otro pivote, el equipo sigue apoyandose
- * en el suelo sin tocar equipos.ts.
+ * en su mesa sin tocar equipos.ts.
  *
  * La carga vive en App y no aqui a proposito: la barra de progreso es interfaz 2D,
  * esta fuera del lienzo, y el estado tiene que nacer donde puedan verlo los dos.
@@ -38,15 +46,35 @@ export default function EquipoEnEscena({
   hotspotAbierto: string | null
   onSeleccionarHotspot: (id: string | null) => void
 }) {
+  const grupoRef = useRef<Group>(null)
+
   if (modelo === null) {
     return null
   }
 
+  /**
+   * En modo colocacion, un clic sobre el equipo anota el punto en SU espacio local,
+   * que es el que usan los hotspots. Se convierte con worldToLocal del grupo
+   * exterior, de modo que la cifra sigue valiendo aunque el equipo se mueva de sitio
+   * o cambie de altura.
+   */
+  const anotarClic = (evento: ThreeEvent<MouseEvent>) => {
+    const grupo = grupoRef.current
+    if (grupo === null) {
+      return
+    }
+    evento.stopPropagation()
+    grupo.worldToLocal(puntoAuxiliar.copy(evento.point))
+    anotarPunto(puntoAuxiliar.x, puntoAuxiliar.y, puntoAuxiliar.z)
+  }
+
   return (
     <group
+      ref={grupoRef}
       name={`equipo:${equipo.id}`}
       position={[...equipo.posicionInicial]}
       rotation={[0, MathUtils.degToRad(equipo.rotacionY ?? 0), 0]}
+      onClick={EN_COLOCACION ? anotarClic : undefined}
     >
       <group scale={equipo.escala}>
         <group position={calcularCentrado(modelo.caja)}>

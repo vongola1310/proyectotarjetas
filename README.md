@@ -41,6 +41,23 @@ levantando esa mano.
 El dato que más importa no es el fps medio sino el **peor cuadro**. Una media de 72
 con un cuadro suelto de 40 ms se siente como un tirón, y la media no lo delata.
 
+### Colocar hotspots
+
+Añade `?colocar` a la dirección. Haz clic sobre la pieza del equipo y aparece la
+línea lista para pegar en `src/data/equipos.ts`:
+
+```
+posicion: [0.413, 0.228, 0.36],
+```
+
+Las coordenadas salen en el espacio local del equipo —origen en el centro de su
+huella, `Y = 0` en su base— así que siguen valiendo aunque el equipo cambie de sitio
+o de altura.
+
+Existe porque las posiciones de los hotspots **no se pueden calcular**: hay que
+señalar la pieza, y quien conoce el equipo es el equipo comercial, no quien escribe
+el código.
+
 ## Comandos
 
 | comando | qué hace |
